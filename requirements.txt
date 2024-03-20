@@ -1,0 +1,2 @@
+streamlit==1.29.0
+mojimoji==0.0.13
