@@ -7,6 +7,14 @@ import mojimoji
 def to_half_width(text):
     return mojimoji.zen_to_han(text, kana=False)
 
+# dfに色を付ける関数
+def color_cells(val):
+    color = 'red' if val > 0 else 'blue' if val < 0 else 'black'
+    return 'color: %s' % color
+
+def apply_style(df, column):
+    return df.style.applymap(color_cells, subset=[column])
+
 #github
 st.set_page_config(layout="wide")
 
@@ -94,7 +102,7 @@ data___ = data__[["銘柄","コード","目標株価引上率","従来目標株�
 
 df_merge = pd.merge(data___,database_org,on="コード",how="left")
 df_merge_ = df_merge[["コード","銘柄名","市場","33業種","17業種","規模","目標株価引上率","従来目標株価","新目標株価","証券会社","基準","従来投資判断","新投資判断"]]
-
+df_merge_style = apply_style(df_merge_, "目標株価引上率")
 #df_merge_：元の表
 #df_stat_scal：規模統計
 #df_stat_33：業種統計
@@ -113,4 +121,4 @@ df_stat_33["割合"]=round((df_stat_33["プラス"]-df_stat_33["マイナス"])/
 
 st.dataframe(df_stat_scal)
 st.dataframe(df_stat_33)
-st.dataframe(df_merge_)
+st.dataframe(df_merge_style)
