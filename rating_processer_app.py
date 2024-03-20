@@ -53,11 +53,15 @@ for s,line in enumerate(lines):
             if SH.count("「") ==2: 
                 old_rating = parts[1].split("「")[1].split("」")[0].replace("\n","")
                 new_rating = parts[1].split("→")[1].split("、")[0].replace("「","").replace("」","").replace("\n","")
+            
             elif SH.count("「") ==1:
                 if parts[1].split("「")[0].count("新規") ==1:
                     old_rating = "新規"
                     new_rating = parts[1].split("「")[1].split("」")[0].replace("\n","")
-
+                elif parts[1].split("「")[0].count("再開") ==1:
+                    old_rating = "再開"
+                    new_rating = parts[1].split("「")[1].split("」")[0].replace("\n","")
+                    
             if SH.count("円") ==2: 
                 old_price = parts[1].split("、")[1].split("→")[0].split("円")[0].replace("\n","")
                 new_price = parts[1].split("、")[1].split("→")[1].split("円")[0].replace("\n","")
