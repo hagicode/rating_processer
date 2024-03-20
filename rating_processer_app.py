@@ -95,4 +95,22 @@ data___ = data__[["銘柄","コード","目標株価引上率","従来目標株�
 df_merge = pd.merge(data___,database_org,on="コード",how="left")
 df_merge_ = df_merge[["コード","銘柄名","市場","33業種","17業種","規模","目標株価引上率","従来目標株価","新目標株価","証券会社","基準","従来投資判断","新投資判断"]]
 
+#df_merge_：元の表
+#df_stat_scal：規模統計
+#df_stat_33：業種統計
+
+df_stat = df_merge_[~df_merge_["目標株価引上率"].isnull()]
+plus = (df_stat["目標株価引上率"]>=0).astype(int)
+minas = (df_stat["目標株価引上率"]<0).astype(int)
+df_stat["プラス"]=plus
+df_stat["マイナス"]=minas
+
+df_stat_scal = pd.concat([df_stat.groupby("規模")["目標株価引上率"].mean(),df_stat.groupby("規模")["プラス"].sum(),df_stat.groupby("規模")["マイナス"].sum()],axis=1)
+df_stat_scal["割合"]=round((df_stat_scal["プラス"]-df_stat_scal["マイナス"])/(df_stat_scal["プラス"]+df_stat_scal["マイナス"]),2)
+df_stat_33 = pd.concat([df_stat.groupby("33業種")["目標株価引上率"].mean(),df_stat.groupby("33業種")["プラス"].sum(),df_stat.groupby("33業種")["マイナス"].sum()],axis=1)
+df_stat_33["割合"]=round((df_stat_33["プラス"]-df_stat_33["マイナス"])/(df_stat_33["プラス"]+df_stat_33["マイナス"]),2)
+
+
+st.dataframe(df_stat_scal)
+st.dataframe(df_stat_33)
 st.dataframe(df_merge_)
