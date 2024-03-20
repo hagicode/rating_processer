@@ -19,6 +19,16 @@ if text:
     data = []
     # 文章を行ごとに分割
     lines = text_.split("\n\n・")
+    
+    shoken_company = ""
+    rating_base = ""
+    parts = ""
+    company =  ""
+    code = ""
+    old_rating = ""
+    new_rating = ""
+    old_price = ""
+    new_price = ""
 
     for s,line in enumerate(lines):
         shoken_list = lines[s].split("\n\u3000") 
