@@ -7,6 +7,9 @@ import mojimoji
 def to_half_width(text):
     return mojimoji.zen_to_han(text, kana=False)
 
+#github
+st.set_page_config(layout="wide")
+
 # Streamlit app
 st.title('Rating Data Processor')
 
