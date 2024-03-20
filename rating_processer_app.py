@@ -20,6 +20,13 @@ if text:
     # 文章を行ごとに分割
     lines = text_.split("\n\n・")
 
+#市場区分などの情報
+url = 'https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xls'
+df_jpx = pd.read_excel(url)
+df_jpx = df_jpx.iloc[:, [1, 2, 3, 5, 7, 9]]
+database = df_jpx[df_jpx['市場・商品区分'].isin([ "プライム（内国株式）", "スタンダード（内国株式）","グロース（内国株式）"])].reset_index(drop=True)
+database_org = database.astype(str).replace("プライム（内国株式）","東P").replace("スタンダード（内国株式）","東S",).replace("グロース（内国株式）","東G").rename(columns={"市場・商品区分":"市場","33業種区分":"33業種","17業種区分":"17業種","規模区分":"規模"})
+
 shoken_company = ""
 rating_base = ""
 parts = ""
@@ -82,4 +89,7 @@ data__ = data_.replace(np.nan,"").applymap(to_half_width).replace("",np.nan).ast
 data__["目標株価引上率"]= 	round((data__["新目標株価"]	- data__["従来目標株価"])/data__["従来目標株価"]*100,1)
 data___ = data__[["銘柄","コード","目標株価引上率","従来目標株価","新目標株価","証券会社","基準","従来投資判断","新投資判断"]]
 
-st.dataframe(data___)
+df_merge = pd.merge(data___,database_org,on="コード",how="left")
+df_merge_ = df_merge[["コード","銘柄名","市場","33業種","17業種","規模","目標株価引上率","従来目標株価","新目標株価","証券会社","基準","従来投資判断","新投資判断"]]
+
+st.dataframe(df_merge_)
