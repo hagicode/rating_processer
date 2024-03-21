@@ -118,7 +118,8 @@ df_stat_scal["割合"]=round((df_stat_scal["プラス"]-df_stat_scal["マイナ�
 df_stat_33 = pd.concat([df_stat.groupby("33業種")["目標株価引上率"].mean(),df_stat.groupby("33業種")["プラス"].sum(),df_stat.groupby("33業種")["マイナス"].sum()],axis=1)
 df_stat_33["割合"]=round((df_stat_33["プラス"]-df_stat_33["マイナス"])/(df_stat_33["プラス"]+df_stat_33["マイナス"]),2)
 
+col1, col2 = st.columns(2)
 
-st.dataframe(df_stat_scal)
-st.dataframe(df_stat_33)
+col1.dataframe(df_stat_scal)
+col2.dataframe(df_stat_33)
 st.dataframe(df_merge_style)
