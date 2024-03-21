@@ -120,6 +120,6 @@ df_stat_33["割合"]=round((df_stat_33["プラス"]-df_stat_33["マイナス"])/
 
 col1, col2 = st.columns(2)
 
-col1.dataframe(df_stat_scal)
-col2.dataframe(df_stat_33)
-st.dataframe(df_merge_style)
+col1.dataframe(df_stat_scal,use_container_width=True)
+col2.dataframe(df_stat_33,use_container_width=True)
+st.dataframe(df_merge_style,use_container_width=True)
