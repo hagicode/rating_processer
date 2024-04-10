@@ -12,6 +12,12 @@ from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 import datetime
 
+#github
+st.set_page_config(layout="wide")
+
+# Streamlit app
+st.title('Rating Data Processor')
+
 #決算スケジュール用
 dt_now_jst_aware = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
 tgt_month = dt_now_jst_aware.strftime('%Y-%m')
@@ -100,11 +106,7 @@ def color_cells(val):
 def apply_style(df, column):
     return df.style.applymap(color_cells, subset=[column])
 
-#github
-st.set_page_config(layout="wide")
 
-# Streamlit app
-st.title('Rating Data Processor')
 
 # User input
 text = st.text_area("Paste your text here:")
