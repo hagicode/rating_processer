@@ -2,6 +2,91 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import mojimoji
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+import pandas as pd
+import datetime
+import time
+import requests
+from datetime import date, timedelta
+from dateutil.relativedelta import relativedelta
+import datetime
+
+#決算スケジュール用
+dt_now_jst_aware = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
+tgt_month = dt_now_jst_aware.strftime('%Y-%m')
+last_month =(dt_now_jst_aware - relativedelta(months=1)).strftime('%Y-%m')
+
+def cook_Kessan_schedule_tgt_month():
+  try:
+      tgt = "https://nikkeiyosoku.com/stock/financial_statement/month/"+tgt_month
+      html = urlopen(tgt)
+      bsObj = BeautifulSoup(html, 'html.parser')
+      table = bsObj.findAll('table', {'class':"table table-bordered tb-center tb-td3-w10 tb-td4-w10"})[0]
+      rows = table.findAll('tr')
+
+      for row in rows:
+          rec = []
+          for cell in row.findAll(['td', 'th']):
+              rec.append(cell.get_text())
+          dish1.append(rec)
+
+      rows = table.findAll('tr')
+      #print(dish)
+      return 'Success'
+  except Exception as e:
+      return  str(e)
+
+def cook_Kessan_schedule_last_month():
+  try:
+      tgt = "https://nikkeiyosoku.com/stock/financial_statement/month/"+last_month
+      html = urlopen(tgt)
+      bsObj = BeautifulSoup(html, 'html.parser')
+      table = bsObj.findAll('table', {'class':"table table-bordered tb-center tb-td3-w10 tb-td4-w10"})[0]
+      rows = table.findAll('tr')
+
+      for row in rows:
+          rec = []
+          for cell in row.findAll(['td', 'th']):
+              rec.append(cell.get_text())
+          dish2.append(rec)
+
+      rows = table.findAll('tr')
+      #print(dish)
+      return 'Success'
+  except Exception as e:
+      return  str(e)
+
+@st.cache_data
+def get_df_schedule():
+    # 元の関数を呼び出す
+    cook_Kessan_schedule_tgt_month()
+    cook_Kessan_schedule_last_month()
+
+    # データを整形する
+    col_names1 = [i.replace("\n","") for i in pd.DataFrame(dish1).loc[0]]
+    df_schedule1 = pd.DataFrame(dish1).set_axis(col_names1,axis=1).drop(0)
+    code_1 = [i.replace("\n","").replace(" ","")  for i in df_schedule1["銘柄名"]]
+    df_schedule1["銘柄名"] = code_1
+    code1 = [i.split("(",)[1].replace(")","") for i in df_schedule1["銘柄名"]]
+    df_schedule1["コード"] = code1
+
+    col_names2 = [i.replace("\n","") for i in pd.DataFrame(dish2).loc[0]]
+    df_schedule2 = pd.DataFrame(dish2).set_axis(col_names2,axis=1).drop(0)
+    code_2 = [i.replace("\n","").replace(" ","")  for i in df_schedule2["銘柄名"]]
+    df_schedule2["銘柄名"] = code_2
+    code2 = [i.split("(",)[1].replace(")","") for i in df_schedule2["銘柄名"]]
+    df_schedule2["コード"] = code2
+
+    # データを結合する
+    df_schedule = pd.concat([df_schedule2,df_schedule1],axis=0)
+
+    return df_schedule
+
+dish1 = []
+dish2 = []
+df_schedule = get_df_schedule().rename(columns={"発表日":"決算発表日"})
+df_schedule_ = df_schedule[["決算発表日","コード"]]
 
 # 半角に変換する関数
 def to_half_width(text):
@@ -102,7 +187,9 @@ data___ = data__[["銘柄","コード","目標株価引上率","従来目標株�
 
 df_merge = pd.merge(data___,database_org,on="コード",how="left")
 df_merge_ = df_merge[["コード","銘柄名","市場","33業種","17業種","規模","目標株価引上率","従来目標株価","新目標株価","証券会社","基準","従来投資判断","新投資判断"]]
-df_merge_style = apply_style(df_merge_, "目標株価引上率")
+
+df_merge_kessan = pd.merge(df_schedule_,df_merge_ ,on="コード",how="right")
+df_merge_style = apply_style(df_merge_kessan, "目標株価引上率")
 #df_merge_：元の表
 #df_stat_scal：規模統計
 #df_stat_33：業種統計
