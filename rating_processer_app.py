@@ -109,11 +109,11 @@ def highlight_dates(val):
     yesterday = pd.to_datetime(today - timedelta(days=1))
     day_before_yesterday = pd.to_datetime(today - timedelta(days=2))
 
-    if val.date() == today:
+    if val == today:
         color = 'yellow'  # 今日のデータの色
-    elif val.date() == yesterday:
+    elif val == yesterday:
         color = 'orange'  # 昨日のデータの色
-    elif val.date() == day_before_yesterday:
+    elif val == day_before_yesterday:
         color = 'red'    # 一昨日のデータの色
     else:
         color = 'black'  # それ以外のデータの色
