@@ -93,7 +93,7 @@ dish1 = []
 dish2 = []
 df_schedule = get_df_schedule().rename(columns={"発表日":"決算発表日"})
 df_schedule_ = df_schedule[["決算発表日","コード"]]
-df_schedule_["決算発表日"] = pd.to_datetime(str(dt_now_jst_aware.year)+"/"+df_schedule_["決算発表日"])
+#df_schedule_["決算発表日"] = pd.to_datetime(str(dt_now_jst_aware.year)+"/"+df_schedule_["決算発表日"])
 
 # 半角に変換する関数
 def to_half_width(text):
