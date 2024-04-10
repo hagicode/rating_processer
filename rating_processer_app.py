@@ -93,6 +93,7 @@ dish1 = []
 dish2 = []
 df_schedule = get_df_schedule().rename(columns={"発表日":"決算発表日"})
 df_schedule_ = df_schedule[["決算発表日","コード"]]
+df_schedule_["決算発表日"] = pd.to_datetime(str(dt_now_jst_aware.year)+"/"+df_schedule_["決算発表日"])
 
 # 半角に変換する関数
 def to_half_width(text):
@@ -103,8 +104,25 @@ def color_cells(val):
     color = 'red' if val > 0 else 'blue' if val < 0 else 'black'
     return 'color: %s' % color
 
-def apply_style(df, column):
-    return df.style.applymap(color_cells, subset=[column])
+def highlight_dates(val):
+    today = pd.to_datetime(dt_now_jst_aware.date())
+    yesterday = pd.to_datetime(today - timedelta(days=1))
+    day_before_yesterday = pd.to_datetime(today - timedelta(days=2))
+
+    if val.date() == today:
+        color = 'yellow'  # 今日のデータの色
+    elif val.date() == yesterday:
+        color = 'orange'  # 昨日のデータの色
+    elif val.date() == day_before_yesterday:
+        color = 'red'    # 一昨日のデータの色
+    else:
+        color = 'black'  # それ以外のデータの色
+
+    return f'color: {color}'
+
+
+
+
 
 
 
@@ -191,7 +209,11 @@ df_merge = pd.merge(data___,database_org,on="コード",how="left")
 df_merge_ = df_merge[["コード","銘柄名","市場","33業種","17業種","規模","目標株価引上率","従来目標株価","新目標株価","証券会社","基準","従来投資判断","新投資判断"]]
 
 df_merge_kessan = pd.merge(df_schedule_,df_merge_ ,on="コード",how="right")
-df_merge_style = apply_style(df_merge_kessan, "目標株価引上率")
+
+
+df_merge_style = df_merge_kessan.style.applymap(color_cells, subset=["目標株価引上率"])
+df_merge_style_ = df_merge_style.style.applymap(highlight_dates, subset=["決算発表日"])
+
 #df_merge_：元の表
 #df_stat_scal：規模統計
 #df_stat_33：業種統計
@@ -211,4 +233,4 @@ col1, col2 = st.columns(2)
 
 col1.dataframe(df_stat_scal,use_container_width=True)
 col2.dataframe(df_stat_33,use_container_width=True)
-st.dataframe(df_merge_style,use_container_width=True)
+st.dataframe(df_merge_style_,use_container_width=True)
