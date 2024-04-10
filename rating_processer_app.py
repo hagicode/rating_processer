@@ -212,7 +212,7 @@ df_merge_kessan = pd.merge(df_schedule_,df_merge_ ,on="コード",how="right")
 
 
 df_merge_style = df_merge_kessan.style.applymap(color_cells, subset=["目標株価引上率"])
-df_merge_style_ = df_merge_style.style.applymap(highlight_dates, subset=["決算発表日"])
+df_merge_style_ = df_merge_style.reset_index().style.applymap(highlight_dates, subset=["決算発表日"])
 
 #df_merge_：元の表
 #df_stat_scal：規模統計
