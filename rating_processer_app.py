@@ -225,6 +225,11 @@ df_merge_kessan = pd.merge(df_schedule_,df_merge_ ,on="コード",how="right")
 df_merge_kessan_theme = pd.merge(df_merge_kessan,theme_df_,on="コード",how="left")
 df_merge_kessan_theme_=df_merge_kessan_theme.dropna(how='all', axis=1)
 
+#themeの要約＋順番
+theme_summary = df_merge_kessan_theme_.drop(df_merge_kessan.columns,axis=1).describe().T["count"].sort_values(by="count",ascending=False)
+col_index= df_merge_kessan.columns.tolist()+theme_summary.index.tolist()
+df_merge_kessan_theme__=df_merge_kessan_theme_.reindex(columns=col_index)
+
 df_merge_style = df_merge_kessan_theme_.style.applymap(color_cells, subset=["目標株価引上率"])
 #df_merge_style_ = df_merge_style.reset_index().style.applymap(highlight_dates, subset=["決算発表日"])
 
@@ -244,13 +249,12 @@ df_stat_33 = pd.concat([df_stat.groupby("33業種")["目標株価引上率"].mea
 df_stat_33["割合"]=round((df_stat_33["プラス"]-df_stat_33["マイナス"])/(df_stat_33["プラス"]+df_stat_33["マイナス"]),2)
 
 
-#theme
-theme_summary = df_merge_kessan_theme_.drop(df_merge_kessan.columns,axis=1).describe().T["count"]
+
 
 
 col1, col2 = st.columns(2)
 
 col1.dataframe(df_stat_scal,use_container_width=True)
 col2.dataframe(df_stat_33,use_container_width=True)
-st.dataframe(theme_summary)
+st.dataframe(theme_summary,use_container_width=True)
 st.dataframe(df_merge_style,use_container_width=True)
