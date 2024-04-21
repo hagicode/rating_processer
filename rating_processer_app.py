@@ -148,7 +148,7 @@ database = df_jpx[df_jpx['市場・商品区分'].isin([ "プライム（内国�
 database_org = database.astype(str).replace("プライム（内国株式）","東P").replace("スタンダード（内国株式）","東S",).replace("グロース（内国株式）","東G").rename(columns={"市場・商品区分":"市場","33業種区分":"33業種","17業種区分":"17業種","規模区分":"規模"})
 
 #テーマ情報
-l2 = sorted(glob.glob('/*.csv', recursive=True))
+l2 = sorted(glob.glob('*.csv', recursive=True))
 p = pathlib.Path(l2[-1])
 theme_df = pd.read_csv(p,encoding="cp932")
 theme_df_ = theme_df.replace(0,np.nan)
