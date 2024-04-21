@@ -245,7 +245,7 @@ df_stat_33["割合"]=round((df_stat_33["プラス"]-df_stat_33["マイナス"])/
 
 
 #theme
-theme_summary = df_merge_kessan_theme_.drop(df_merge_kessan.columns,axis=1).describe()
+theme_summary = df_merge_kessan_theme_.drop(df_merge_kessan.columns,axis=1).describe().T["count"]
 
 
 col1, col2 = st.columns(2)
