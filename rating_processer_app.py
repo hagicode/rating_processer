@@ -230,7 +230,7 @@ theme_summary = df_merge_kessan_theme_.drop(df_merge_kessan.columns,axis=1).desc
 col_index= df_merge_kessan.columns.tolist()+theme_summary.index.tolist()
 df_merge_kessan_theme__=df_merge_kessan_theme_.reindex(columns=col_index)
 
-df_merge_style = df_merge_kessan_theme_.style.applymap(color_cells, subset=["目標株価引上率"])
+df_merge_style = df_merge_kessan_theme__.style.applymap(color_cells, subset=["目標株価引上率"])
 #df_merge_style_ = df_merge_style.reset_index().style.applymap(highlight_dates, subset=["決算発表日"])
 
 #df_merge_：元の表
