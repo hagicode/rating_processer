@@ -11,6 +11,10 @@ import requests
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 import datetime
+import glob
+import pathlib
+import os
+
 
 #github
 st.set_page_config(layout="wide")
@@ -143,6 +147,13 @@ df_jpx = df_jpx.iloc[:, [1, 2, 3, 5, 7, 9]]
 database = df_jpx[df_jpx['市場・商品区分'].isin([ "プライム（内国株式）", "スタンダード（内国株式）","グロース（内国株式）"])].reset_index(drop=True)
 database_org = database.astype(str).replace("プライム（内国株式）","東P").replace("スタンダード（内国株式）","東S",).replace("グロース（内国株式）","東G").rename(columns={"市場・商品区分":"市場","33業種区分":"33業種","17業種区分":"17業種","規模区分":"規模"})
 
+#テーマ情報
+l2 = sorted(glob.glob('/*.csv', recursive=True))
+p = pathlib.Path(l2[-1])
+theme_df = pd.read_csv(p,encoding="cp932")
+theme_df_ = theme_df.replace(0,np.nan)
+
+
 shoken_company = ""
 rating_base = ""
 parts = ""
@@ -210,8 +221,11 @@ df_merge_ = df_merge[["コード","銘柄名","市場","33業種","17業種","�
 
 df_merge_kessan = pd.merge(df_schedule_,df_merge_ ,on="コード",how="right")
 
+#themeとの結合
+df_merge_kessan_theme = pd.merge(df_merge_kessan,theme_df_,on="コード",how="left")
+df_merge_kessan_theme_=df_merge_kessan_theme.dropna(how='all', axis=1)
 
-df_merge_style = df_merge_kessan.style.applymap(color_cells, subset=["目標株価引上率"])
+df_merge_style = df_merge_kessan_theme_.style.applymap(color_cells, subset=["目標株価引上率"])
 #df_merge_style_ = df_merge_style.reset_index().style.applymap(highlight_dates, subset=["決算発表日"])
 
 #df_merge_：元の表
