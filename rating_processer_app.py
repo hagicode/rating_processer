@@ -226,7 +226,7 @@ df_merge_kessan_theme = pd.merge(df_merge_kessan,theme_df_,on="コード",how="l
 df_merge_kessan_theme_=df_merge_kessan_theme.dropna(how='all', axis=1)
 
 #themeの要約＋順番
-theme_summary = df_merge_kessan_theme_.drop(df_merge_kessan.columns,axis=1).describe().T["count"].sort_values("count",ascending=False)
+theme_summary = df_merge_kessan_theme_.drop(df_merge_kessan.columns,axis=1).describe().T["count"].sort_values(ascending=False)
 col_index= df_merge_kessan.columns.tolist()+theme_summary.index.tolist()
 df_merge_kessan_theme__=df_merge_kessan_theme_.reindex(columns=col_index)
 
