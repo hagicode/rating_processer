@@ -259,11 +259,35 @@ col2.dataframe(df_stat_33,use_container_width=True)
 st.dataframe(theme_summary,use_container_width=True)
 st.dataframe(df_merge_style,use_container_width=True)
 
+df_DWLD = df_merge_kessan_theme__.copy()
+str_columns = df_DWLD.columns[14:]
+
+for col in str_columns:#one-hotからの変更
+    df_DWLD[col]= df_DWLD[col].apply(lambda x : col if x >= 1 else np.nan)
+
+# 各列の文字列をリストとしてつなげる
+df_DWLD['combined'] = df_DWLD.apply(lambda row: [x for x in row if pd.notna(x)], axis=1)
+# リストを文字列に変換
+df_DWLD['combined_str'] = df_DWLD['combined'].apply(lambda x: ', '.join(map(str, x)))
+
+
+df_DWLD["C1"] = df_DWLD["コード"]
+df_DWLD["C2"] = np.nan
+df_DWLD["C3"] = "TKY"
+df_DWLD["C4"] = np.nan
+df_DWLD["C5"] = np.nan
+df_DWLD["C6"] = np.nan
+df_DWLD["C7"] = np.nan
+df_DWLD["C8"] = np.nan
+df_DWLD["C9"] = "("+df_DWLD["目標株価引上率"]+")"+df_DWLD["決算発表日"]+"["+df_DWLD['combined_str']+"]"
+
+df_DWLD_ = df_DWLD[["C1","C2","C3","C4","C5","C6","C7","C8","C9"]]
+
 @st.cache
 def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv().encode('cp932')
-csv = convert_df(df_merge_kessan_theme__)
+csv = convert_df(df_DWLD_)
 
 st.download_button(
     label="Download data as CSV",
