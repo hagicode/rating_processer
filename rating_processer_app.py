@@ -297,7 +297,7 @@ def convert_df(df):
 csv = convert_df(df_DWLD__)
 
 st.download_button(
-    label="SBIリスト",
+    label="SBIインポートリスト",
     data=csv,
     file_name=dt_now_jst_aware.strftime('%y%m%d')+'レーティング.csv',
     mime='text/csv',
