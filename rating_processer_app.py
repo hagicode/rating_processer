@@ -266,7 +266,7 @@ for col in str_columns:#one-hotからの変更
     df_DWLD[col]= df_DWLD[col].apply(lambda x : col if x >= 1 else np.nan)
 
 # 各列の文字列をリストとしてつなげる
-df_DWLD['combined'] = df_DWLD.apply(lambda row: [x for x in row if pd.notna(x)], axis=1)
+df_DWLD['combined'] = df_DWLD[str_columns].apply(lambda row: [x for x in row if pd.notna(x)], axis=1)
 # リストを文字列に変換
 df_DWLD['combined_str'] = df_DWLD['combined'].apply(lambda x: ', '.join(map(str, x)))
 
