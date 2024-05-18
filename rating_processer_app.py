@@ -263,7 +263,7 @@ st.dataframe(df_merge_style,use_container_width=True)
 def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv().encode('cp932')
-csv = convert_df(df_merge_style)
+csv = convert_df(df_merge_kessan_theme__)
 
 st.download_button(
     label="Download data as CSV",
