@@ -259,8 +259,14 @@ col2.dataframe(df_stat_33,use_container_width=True)
 st.dataframe(theme_summary,use_container_width=True)
 st.dataframe(df_merge_style,use_container_width=True)
 
-df_DWLD = df_merge_kessan_theme__.copy()
-str_columns = df_DWLD.columns[14:]
+df_DWLD__ = df_merge_kessan_theme__.copy()
+str_columns = df_DWLD__.columns[14:]
+
+# ソートするカラムを選択するセレクトボックスを作成
+sort_column = st.selectbox('Sort by:', ['目標株価引上率', '決算発表日'])
+
+# 選択したカラムでデータフレームをソート
+df_DWLD = df_DWLD__.sort_values(by=sort_column)
 
 for col in str_columns:#one-hotからの変更
     df_DWLD[col]= df_DWLD[col].apply(lambda x : col if x >= 1 else np.nan)
@@ -282,18 +288,13 @@ df_DWLD["C8"] = np.nan
 df_DWLD["C9"] = df_DWLD.apply(lambda row: "(" + str(row["目標株価引上率"]) + ")" + str(row["決算発表日"]) + "[" + str(row['combined_str']) + "]", axis=1)
 df_DWLD_ = df_DWLD[["C1","C2","C3","C4","C5","C6","C7","C8","C9"]]
 
-# ソートするカラムを選択するセレクトボックスを作成
-sort_column = st.selectbox('Sort by:', ['目標株価引上率', '決算発表日'])
-
-# 選択したカラムでデータフレームをソート
-df_DWLD__ = df_DWLD_.sort_values(by=sort_column)
 
 
 @st.cache
 def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv(index=False, header=False).encode('cp932')
-csv = convert_df(df_DWLD__)
+csv = convert_df(df_DWLD_)
 
 st.download_button(
     label="SBIリスト",
