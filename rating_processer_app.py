@@ -271,22 +271,22 @@ df_DWLD['combined'] = df_DWLD[str_columns].apply(lambda row: [x for x in row if 
 df_DWLD['combined_str'] = df_DWLD['combined'].apply(lambda x: ', '.join(map(str, x)))
 
 
-df_DWLD["C1"] = df_DWLD["コード"]
+df_DWLD["C1(コード)"] = df_DWLD["コード"]
 df_DWLD["C2"] = np.nan
-df_DWLD["C3"] = "TKY"
+df_DWLD["C3(市場)"] = "TKY"
 df_DWLD["C4"] = np.nan
 df_DWLD["C5"] = np.nan
 df_DWLD["C6"] = np.nan
 df_DWLD["C7"] = np.nan
 df_DWLD["C8"] = np.nan
-df_DWLD["C9"] = df_DWLD.apply(lambda row: "(" + str(row["目標株価引上率"]) + ")" + str(row["決算発表日"]) + "[" + str(row['combined_str']) + "]", axis=1)
+df_DWLD["C9(メモ：目標株価引上率・決算発表日・テーマ)"] = df_DWLD.apply(lambda row: "(" + str(row["目標株価引上率"]) + ")" + str(row["決算発表日"]) + "[" + str(row['combined_str']) + "]", axis=1)
 
 # ソートするカラムを選択するセレクトボックスを作成
-sort_column = st.selectbox('Sort by:', ['目標株価引上率', '決算発表日'])
+sort_column = st.selectbox('データ順／データイメージ:', ['目標株価引上率', '決算発表日'])
 
 # 選択したカラムでデータフレームをソート
 df_DWLD_ = df_DWLD.sort_values(by=sort_column,ascending=False)
-df_DWLD__ = df_DWLD_[["C1","C2","C3","C4","C5","C6","C7","C8","C9"]]
+df_DWLD__ = df_DWLD_[["C1(コード)","C2","C3(市場)","C4","C5","C6","C7","C8","C9(メモ：目標株価引上率・決算発表日・テーマ)"]]
 
 st.dataframe(df_DWLD__,use_container_width=True)
 
