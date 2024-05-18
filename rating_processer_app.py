@@ -258,3 +258,16 @@ col1.dataframe(df_stat_scal,use_container_width=True)
 col2.dataframe(df_stat_33,use_container_width=True)
 st.dataframe(theme_summary,use_container_width=True)
 st.dataframe(df_merge_style,use_container_width=True)
+
+@st.cache
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+    return df.to_csv().encode('cp932')
+csv = convert_df(df_merge_style)
+
+st.download_button(
+    label="Download data as CSV",
+    data=csv,
+    file_name='レーティング.csv',
+    mime='text/csv',
+)
