@@ -285,11 +285,11 @@ df_DWLD["C9"] = df_DWLD.apply(lambda row: "(" + str(row["目標株価引上率"]
 sort_column = st.selectbox('Sort by:', ['目標株価引上率', '決算発表日'])
 
 # 選択したカラムでデータフレームをソート
-df_DWLD_ = df_DWLD.sort_values(by=sort_column)
+df_DWLD_ = df_DWLD.sort_values(by=sort_column,ascending=False)
 
 df_DWLD__ = df_DWLD_[["C1","C2","C3","C4","C5","C6","C7","C8","C9"]]
 
-st.dataframe(df_DWLD_,use_container_width=True)
+st.dataframe(df_DWLD__,use_container_width=True)
 
 @st.cache
 def convert_df(df):
