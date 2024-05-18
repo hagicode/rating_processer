@@ -279,8 +279,9 @@ df_DWLD["C5"] = np.nan
 df_DWLD["C6"] = np.nan
 df_DWLD["C7"] = np.nan
 df_DWLD["C8"] = np.nan
-#df_DWLD["C9"] = "("+df_DWLD["目標株価引上率"]+")"+df_DWLD["決算発表日"]+"["+df_DWLD['combined_str']+"]"
-df_DWLD["C9"] = "("+df_DWLD["目標株価引上率"]+")"+df_DWLD["決算発表日"]
+df_DWLD["C9"] = df_DWLD.apply(lambda row: "(" + str(row["目標株価引上率"]) + ")" + str(row["決算発表日"]) + "[" + str(row['combined_str']) + "]", axis=1)
+
+#df_DWLD["C9"] = "("+df_DWLD["目標株価引上率"]+")"+df_DWLD["決算発表日"]
 
 df_DWLD_ = df_DWLD[["C1","C2","C3","C4","C5","C6","C7","C8","C9"]]
 
