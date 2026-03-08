@@ -6,4 +6,5 @@ beautifulsoup4
 requests
 python-dateutil
 openpyxl
+xlrd
 pillow>=10.0.0
