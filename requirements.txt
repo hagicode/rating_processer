@@ -1,7 +1,9 @@
-streamlit==1.29.0
-mojimoji==0.0.13
-xlrd==2.0.1
-beautifulsoup4==4.12.3
-requests==2.31.0
-urllib3==2.0.7
-python-dateutil==2.8.2
+streamlit
+pandas
+numpy
+mojimoji
+beautifulsoup4
+requests
+python-dateutil
+openpyxl
+pillow>=10.0.0
